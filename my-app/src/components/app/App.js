@@ -11,8 +11,6 @@ const App = () => {
 
     const [selectedChar, setChar] = useState(null);
 
-
-
     const onCharSelected = (id) => {
         setChar(id);
     }
