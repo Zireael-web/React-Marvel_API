@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useId} from 'react';
-import PropTypes from 'prop-types';
+import { useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
@@ -7,14 +7,14 @@ import useMarvelService from '../../services/MarvelService';
 
 import './comicsList.scss';
 
-const ComicsList = (props) => {
+const ComicsList = () => {
 
     const [comicsList, setComicsList] = useState([]);
     const [newItemLoading, setNewItemLoading] = useState(false);
-    const [offset, setOffset] = useState(500);
+    const [offset, setOffset] = useState(0);
     const [comicsEnded, setComicsEnded] = useState(false);
+
     const {loading, error, getAllComics} = useMarvelService();
-    const id = useId()
     
 
     useEffect(() => {
@@ -40,35 +40,18 @@ const ComicsList = (props) => {
         setComicsEnded(ended);
     }
 
-    // const itemRefs = useRef([]);
-
-    // const focusOnItem = (id) => {
-    //     itemRefs.current.forEach(item => item.classList.remove('comics__item_selected'));
-    //     itemRefs.current[id].classList.add('comics__item_selected');
-    //     itemRefs.current[id].focus();
-    // }
-
     function renderItems(arr) {
-        const items =  arr.map((item) => {
-            // const imgStyle = (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') ? {objectFit: 'unset'} : null
-            
+        const items =  arr.map((item, i)=> {   
             return (
                 <li 
                     tabIndex={0}
                     className="comics__item"
-                    // ref={el => itemRefs.current[i] = el}
-                    key={item.id}>
-                    {/* onKeyDown={(e) => {
-                        if (e.key === ' ' || e.key === "Enter") {
-                            props.onCharSelected(item.id);
-                            focusOnItem(i);
-                        }
-                    }} */}
-                    <a href="#">
+                    key={i}>
+                    <Link to={`/comics/${item.id}`}>
                         <img src={item.thumbnail} alt={item.title} className="comics__item-img"/>
                         <div className="comics__item-name">{item.title}</div>
                         <div className="comics__item-price">{item.price}</div>
-                    </a>
+                    </Link>
                 </li>
             )
         });
