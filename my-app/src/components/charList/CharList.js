@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
 import useMarvelService from '../../services/MarvelService';
+
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
 import './charList.scss';
 
 const CharList = (props) => {
@@ -47,12 +50,18 @@ const CharList = (props) => {
         itemRefs.current[id].focus();
     }
 
+
     function renderItems(arr) {
         const items =  arr.map((item, i) => {
             const imgStyle = (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') ? {objectFit: 'unset'} : null
-            
+
             return (
-                <li 
+                
+                <CSSTransition
+                timeout={300}
+                key={item.id}
+                classNames="char__item">
+                    <li 
                     tabIndex={0}
                     className="char__item"
                     ref={el => itemRefs.current[i] = el}
@@ -69,13 +78,16 @@ const CharList = (props) => {
                         }}>
                         <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                         <div className="char__name">{item.name}</div>
-                </li>
+                    </li>
+                </CSSTransition>
             )
         });
 
         return (
             <ul className="char__grid">
-                {items}
+                <TransitionGroup component={null}>
+                    {items}
+                </TransitionGroup>
             </ul>
         )
     }
