@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 
 import SingleItemInfo from '../../singleItemInfo/SingleItemInfo';
 
