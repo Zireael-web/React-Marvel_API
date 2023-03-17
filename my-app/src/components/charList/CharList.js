@@ -1,10 +1,8 @@
-import { useState, useEffect, useRef} from 'react';
+import { useState, useEffect, useRef, useMemo} from 'react';
 import PropTypes from 'prop-types';
 
 import useMarvelService from '../../services/MarvelService';
 import setContentList from '../../utils/setContentList';
-
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import './charList.scss';
 
@@ -25,6 +23,7 @@ const CharList = (props) => {
     }, [])
 
     const onRequest = (offset, initial) => {
+        
         initial ? setNewItemLoading(false) : setNewItemLoading(true)
         getAllCharacters(offset)
             .then(onCharListLoaded)
@@ -58,11 +57,6 @@ const CharList = (props) => {
             const imgStyle = (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') ? {objectFit: 'unset'} : null
 
             return (
-                
-                <CSSTransition
-                timeout={300}
-                key={item.id}
-                classNames="char__item">
                     <li 
                     tabIndex={0}
                     className="char__item"
@@ -81,22 +75,23 @@ const CharList = (props) => {
                         <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                         <div className="char__name">{item.name}</div>
                     </li>
-                </CSSTransition>
             )
         });
 
         return (
             <ul className="char__grid">
-                <TransitionGroup component={null}>
                     {items}
-                </TransitionGroup>
             </ul>
         )
     }
 
+    const elements = useMemo(() => {
+        return setContentList(process, () => renderItems(charList), newItemLoading);
+    }, [process]);
+
     return (
         <div className="char__list">
-            {setContentList(process, () => renderItems(charList), newItemLoading)}
+            {elements}
             <button
             disabled={newItemLoading}
             style={{'display': charEnded ? 'none' : 'block'}}

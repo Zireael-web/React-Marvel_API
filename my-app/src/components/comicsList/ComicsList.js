@@ -25,7 +25,7 @@ const ComicsList = () => {
         initial ? setNewItemLoading(false) : setNewItemLoading(true)
         getAllComics(offset)
             .then(onComicsListLoaded)
-            .then(setProcess('confirmed'));
+            .then(() => setProcess('confirmed'));
     }
 
     const onComicsListLoaded = (newComicsList) => {

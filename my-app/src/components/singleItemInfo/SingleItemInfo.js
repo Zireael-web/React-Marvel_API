@@ -2,17 +2,16 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect} from 'react';
 import { Helmet } from 'react-helmet';
 
-import Spinner from '../spinner/spinner';
-import ErrorMessage from '../errorMessage/errorMessage';
 import useMarvelService from '../../services/MarvelService';
 import AppBanner from '../appBanner/AppBanner';
+import setContentSinglePage from '../../utils/setContent';
 
 import './singleItemInfo.scss';
 
 // itemType = CharacterByName/Comic
 const SingleItemInfo = ({itemType, itemId}) => {
     const [item, setItem] = useState(null);
-    const {loading, error, [`get${itemType}`]: getItem, clearError} = useMarvelService();
+    const {[`get${itemType}`]: getItem, clearError, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         updateItem()
@@ -27,36 +26,31 @@ const SingleItemInfo = ({itemType, itemId}) => {
 
         getItem(itemId)
             .then(onItemLoaded)
+            .then(() => setProcess('confirmed'))
     }
     
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner/> : null;
     
-    let content;
-    let basicCondition = !(loading || error || !item);
-    
-    if (basicCondition && itemType === `Comic`) {
-            content = <ViewComic comic={item}/>} 
-        else if (basicCondition && itemType === `Character`) {
-            content = <ViewChar char={item}/> } 
-        else {
-            content = null;
-            }
-    /* const content = !(loading || error || !item) ? <View item={item}/> : null; */
-
+    const createView = () => {
+        switch (itemType) {
+            case 'Comic':
+                return <ViewComic data={item}/>;
+            case 'Character':
+                return <ViewChar data={item}/>;
+            default:
+                return null;
+        }
+    }
 
     return (
         <>
             <AppBanner/>
-            {spinner}
-            {errorMessage}
-            {content}
+            {setContentSinglePage(process, () => createView())};
         </>
     )
 }
 
-const ViewComic = ({comic}) => {
-    const {title, description, pageCount, thumbnail, lang, price } = comic;
+const ViewComic = ({data}) => {
+    const {title, description, pageCount, thumbnail, lang, price } = data;
 
     return (
         <>
@@ -79,8 +73,8 @@ const ViewComic = ({comic}) => {
     )
 }
 
-const ViewChar = ({char}) => {
-    const {name, description, thumbnail} = char;
+const ViewChar = ({data}) => {
+    const {name, description, thumbnail} = data;
 
     return (
         <>

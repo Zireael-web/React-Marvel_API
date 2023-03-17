@@ -29,7 +29,7 @@ const RandomChar = () => {
 
         getCharacter(id)
             .then(onCharLoaded)
-            .then(setProcess('confirmed'))
+            .then(() => setProcess('confirmed'))
     }
 
         return (

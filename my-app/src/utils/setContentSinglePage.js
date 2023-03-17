@@ -1,14 +1,12 @@
 import Spinner from '../components/spinner/spinner';
 import ErrorMessage from '../components/errorMessage/errorMessage';
 
-const setContentList = (process, Component, newItemLoading) => {
+const setContentSinglePage = (process, View) => {
     switch(process) {
-        case 'waiting':
-            return null; 
         case 'loading':
-            return newItemLoading ? <Component/> : <Spinner/>;
+            return <Spinner/>;
         case 'confirmed':
-            return <Component/>;    
+            return View;
         case 'error':
             return <ErrorMessage/>;
         default:
@@ -16,4 +14,4 @@ const setContentList = (process, Component, newItemLoading) => {
     }
 }
 
-export default setContentList;
+export default setContentSinglePage;
