@@ -1,5 +1,5 @@
 import { lazy, Suspense} from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 import AppHeader from "../appHeader/AppHeader";
 import Spinner from '../spinner/spinner';
@@ -23,23 +23,13 @@ const App = () => {
                 <AppHeader/>
                 <main>
                     <Suspense fallback={<Spinner/>}>
-                        <Switch>
-                            <Route exact path="/">
-                                <MainPage/>
-                            </Route>
-                            <Route exact path="/comics">
-                                <ComicsPage/>
-                            </Route>
-                            <Route exact path="/comics/:comicId">
-                                <SingleComicPage/>
-                            </Route>
-                            <Route exact path="/characters/:charId">
-                                <SingleCharPage/>
-                            </Route>
-                            <Route path="*">
-                                <Page404/>
-                            </Route>
-                        </Switch>
+                        <Routes>
+                            <Route element={<MainPage />} path="/" />
+                            <Route element={<ComicsPage/>} path="/comics" />
+                            <Route element={<SingleComicPage/>} path="/comics/:comicId" /> 
+                            <Route element={<SingleCharPage/>} path="/characters/:charId" />  
+                            <Route element={<Page404/>} path="*" />
+                        </Routes>
                     </Suspense>
                 </main>
             </div>
