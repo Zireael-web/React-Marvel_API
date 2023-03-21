@@ -83,10 +83,11 @@ const CharList = (props) => {
                     {items}
             </ul>
         )
-    }
+    }   
 
     const elements = useMemo(() => {
         return setContentList(process, () => renderItems(charList), newItemLoading);
+    // eslint-disable-next-line
     }, [process]);
 
     return (

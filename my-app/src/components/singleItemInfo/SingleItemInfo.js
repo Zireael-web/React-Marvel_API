@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 
 import useMarvelService from '../../services/MarvelService';
 import AppBanner from '../appBanner/AppBanner';
-import setContentSinglePage from '../../utils/setContent';
+import setContentSinglePage from '../../utils/setContentSinglePage';
 
 import './singleItemInfo.scss';
 
@@ -15,6 +15,7 @@ const SingleItemInfo = ({itemType, itemId}) => {
 
     useEffect(() => {
         updateItem()
+    // eslint-disable-next-line
     }, [itemId])
 
     const onItemLoaded = (item) => {
